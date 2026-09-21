@@ -1070,10 +1070,7 @@ function racimos(puntos, maxKm) {
 }
 
 /* -------------------------------- ESTADO -------------------------------- */
-let DATOS_ORIGINAL = JSON.parse(JSON.stringify(DATOS));   // para "Restablecer originales"
-/* Áreas: si un distrito no las trae, se derivan de las capillas (nunca dos listas con lo mismo) */
-areasDesdeCapillas(DATOS);
-areasDesdeCapillas(DATOS_ORIGINAL);
+let DATOS_ORIGINAL = JSON.parse(JSON.stringify(DATOS));
 let verLimites = leer('mpan.limites', '1') === '1';
 let zonaSel = null;                 // zona resaltada (o null = todas)
 let distritoSel = null;             // distrito seleccionado dentro de la zona
@@ -1889,6 +1886,11 @@ function cargarDatosGuardados() {
 
 /* --------------------------------- ARRANQUE ------------------------------ */
 function iniciar() {
+  /* Áreas: si un distrito no las trae, se derivan de las capillas (nunca dos listas con lo mismo).
+     Se calculan acá y no al declarar el estado porque parecidoNombres() usa RUIDO/ORDINALES,
+     que son 'const' declarados más abajo: usarlos antes lanza "Cannot access before initialization". */
+  areasDesdeCapillas(DATOS);
+  areasDesdeCapillas(DATOS_ORIGINAL);
   conectarHoja();
   document.getElementById('btnIdioma').onclick = alternarIdioma;
   document.getElementById('btnLimites').onclick = alternarLimites;
